@@ -3,274 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Suivez vos indemnités kilométriques professionnelles avec calcul automatique selon le barème URSSAF 2026.">
+  <meta name="description" content="IKtracker Pro - Calcul indemnités kilométriques 2026">
   <meta name="theme-color" content="#2661D9">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="IKtracker Pro">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="IKtracker Pro - Indemnités Kilométriques">
-  <meta property="og:description" content="Calculez automatiquement vos IK selon le barème fiscal 2026">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://votre-domaine.com">
-  
-  <!-- Favicon & Manifest -->
-  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
-  <link rel="apple-touch-icon" href="/icons/icon-192.png">
-  <link rel="manifest" href="/manifest.webmanifest">
-  
-  <title>IKtracker Pro - Calcul IK 2026</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <title>IKtracker Pro</title>
   
   <style>
-    /* CSS critique inline pour chargement rapide */
     :root {
-      --primary: #2661D9;
-      --primary-dark: #1d4ed8;
-      --success: #10B981;
-      --warning: #F59E0B;
-      --danger: #EF4444;
-      --bg: #F8FAFC;
-      --surface: #FFFFFF;
-      --text: #1E293B;
-      --text-muted: #64748B;
-      --border: #E2E8F0;
-      --shadow: 0 1px 3px rgba(0,0,0,0.1);
-      --radius: 12px;
+      --primary: #2661D9; --primary-dark: #1d4ed8; --success: #10B981;
+      --warning: #F59E0B; --danger: #EF4444; --bg: #F8FAFC; --surface: #FFFFFF;
+      --text: #1E293B; --text-muted: #64748B; --border: #E2E8F0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1); --radius: 12px;
     }
-    
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
+      background: var(--bg); color: var(--text); line-height: 1.5;
       padding-bottom: env(safe-area-inset-bottom);
     }
-    
-    /* Header */
     header {
-      background: var(--primary);
-      color: white;
-      padding: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow);
+      background: var(--primary); color: white; padding: 1rem;
+      position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
     }
     header h1 { font-size: 1.25rem; font-weight: 600; }
-    
-    /* Navigation */
     nav {
-      display: flex;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      display: flex; gap: 0.5rem; padding: 0.5rem 1rem;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
     }
     nav button {
-      flex: 0 0 auto;
-      padding: 0.5rem 1rem;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 0 0 auto; padding: 0.5rem 1rem; border: none;
+      background: transparent; color: var(--text-muted);
+      border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;
     }
-    nav button.active {
-      background: var(--primary);
-      color: white;
-    }
-    
-    /* Main content */
+    nav button.active { background: var(--primary); color: white; }
     main { padding: 1rem; max-width: 800px; margin: 0 auto; }
     .screen { display: none; animation: fadeIn 0.3s ease; }
     .screen.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* Cards */
     .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: var(--shadow);
+      background: var(--surface); border-radius: var(--radius);
+      padding: 1rem; margin-bottom: 1rem; box-shadow: var(--shadow);
       border: 1px solid var(--border);
     }
     .card h3 { margin-bottom: 0.75rem; color: var(--primary); font-size: 1.1rem; }
-    
-    /* Forms */
     .form-group { margin-bottom: 1rem; }
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--text);
-    }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
     .form-group input, .form-group select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 1rem;
-      background: var(--bg);
+      width: 100%; padding: 0.75rem; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 1rem; background: var(--bg);
     }
-    .form-group input:focus, .form-group select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(38, 97, 217, 0.1);
-    }
-    
-    /* Buttons */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.5rem; background: var(--primary); color: white;
+      border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+      transition: background 0.2s; text-decoration: none;
     }
     .btn:hover { background: var(--primary-dark); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--primary);
-      color: var(--primary);
-    }
+    .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
     .btn-outline:hover { background: rgba(38, 97, 217, 0.1); }
     .btn-success { background: var(--success); }
     .btn-success:hover { background: #059669; }
-    .btn-danger { background: var(--danger); }
-    .btn-danger:hover { background: #DC2626; }
     .btn-full { width: 100%; justify-content: center; }
-    
-    /* GPS Tracking */
     #gps-status {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      background: var(--bg);
-      border-radius: 8px;
-      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem; background: var(--bg); border-radius: 8px; margin-bottom: 1rem;
     }
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--text-muted);
-    }
+    .status-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--text-muted); }
     .status-dot.active { background: var(--success); animation: pulse 2s infinite; }
-    .status-dot.error { background: var(--danger); }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    
-    /* Stats grid */
     .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem; margin-bottom: 1rem;
     }
     .stat-card {
-      background: var(--surface);
-      padding: 1rem;
-      border-radius: var(--radius);
-      text-align: center;
-      border: 1px solid var(--border);
+      background: var(--surface); padding: 1rem; border-radius: var(--radius);
+      text-align: center; border: 1px solid var(--border);
     }
     .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
     .stat-label { font-size: 0.875rem; color: var(--text-muted); }
-    
-    /* Trips list */
     .trip-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem;
-      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.75rem; border-bottom: 1px solid var(--border);
     }
     .trip-item:last-child { border-bottom: none; }
     .trip-info { flex: 1; }
     .trip-date { font-weight: 600; }
     .trip-distance { color: var(--text-muted); font-size: 0.9rem; }
     .trip-amount { font-weight: 700; color: var(--success); }
-    
-    /* Loading & Empty states */
-    .loading { text-align: center; padding: 2rem; color: var(--text-muted); }
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-muted);
-    }
+    .loading, .empty-state { text-align: center; padding: 2rem; color: var(--text-muted); }
     .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
-    
-    /* Toast notifications */
     #toast {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--text);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      z-index: 1000;
-      transition: transform 0.3s ease;
-      max-width: 90%;
-      text-align: center;
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--text); color: white; padding: 0.75rem 1.5rem;
+      border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000; transition: transform 0.3s ease; max-width: 90%; text-align: center;
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
     #toast.success { background: var(--success); }
     #toast.error { background: var(--danger); }
-    
-    /* Install PWA banner */
-    #install-banner {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--surface);
-      padding: 1rem;
-      border-top: 1px solid var(--border);
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      z-index: 200;
+    #debug-panel {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #1e293b; color: #22d3ee; font-family: monospace;
+      font-size: 11px; padding: 0.5rem; max-height: 150px; overflow-y: auto;
+      z-index: 9999; display: none; border-top: 2px solid #2661D9;
     }
-    #install-banner.show { display: flex; align-items: center; gap: 1rem; }
-    #install-banner .btn { flex-shrink: 0; }
-    
-    /* Responsive */
-    @media (max-width: 480px) {
-      header h1 { font-size: 1.1rem; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    #debug-panel.show { display: block; }
+    #toggle-debug {
+      position: fixed; bottom: 10px; right: 10px;
+      background: #64748b; color: white; border: none;
+      padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; z-index: 10000;
+      font-size: 0.8rem;
     }
-    
-    /* Print styles for PDF export */
     @media print {
-      header, nav, #gps-section, .no-print { display: none !important; }
+      header, nav, #gps-section, .no-print, #debug-panel, #toggle-debug { display: none !important; }
       body { background: white; padding: 0; }
       .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <h1>🚗 IKtracker Pro</h1>
-  </header>
+  <header><h1>🚗 IKtracker Pro</h1></header>
   
-  <!-- Navigation -->
   <nav>
     <button class="nav-btn active" data-screen="gps">📍 GPS</button>
     <button class="nav-btn" data-screen="vehicle">🚙 Véhicule</button>
@@ -279,51 +136,36 @@
     <button class="nav-btn" data-screen="export">📄 Export</button>
   </nav>
   
-  <!-- Main Content -->
   <main>
-    <!-- GPS Tracking Screen -->
+    <!-- GPS Screen -->
     <section id="gps-screen" class="screen active">
       <div class="card">
-        <h3>📍 Tracking GPS Professionnel</h3>
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">
-          Démarrez le tracking en début de journée professionnelle. 
-          L'application calculera automatiquement les distances parcourues.
-        </p>
-        
-        <div id="gps-status">
-          <div class="status-dot" id="gps-dot"></div>
-          <span id="gps-text">GPS en attente...</span>
-        </div>
-        
-        <div id="gps-info" style="display: none; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg); border-radius: 8px;">
+        <h3>📍 Tracking GPS</h3>
+        <p style="color:var(--text-muted);margin-bottom:1rem;">Démarrez le tracking pour enregistrer vos trajets pro.</p>
+        <div id="gps-status"><div class="status-dot" id="gps-dot"></div><span id="gps-text">GPS en attente...</span></div>
+        <div id="gps-info" style="display:none;margin-bottom:1rem;padding:0.75rem;background:var(--bg);border-radius:8px;">
           <div><strong>Début:</strong> <span id="gps-start-time">--:--</span></div>
           <div><strong>Distance:</strong> <span id="gps-distance">0.00</span> km</div>
-          <div><strong>Points:</strong> <span id="gps-points">0</span></div>
         </div>
-        
-        <button id="gps-toggle" class="btn btn-full">▶️ Démarrer le tracking</button>
+        <button id="gps-toggle" class="btn btn-full">▶️ Démarrer</button>
       </div>
-      
       <div class="card">
         <h3>📝 Valider la journée</h3>
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">
-          À la fin de vos trajets professionnels, validez pour enregistrer la distance.
-        </p>
         <div class="form-group">
           <label for="trip-purpose">Motif professionnel *</label>
-          <input type="text" id="trip-purpose" placeholder="Ex: Rendez-vous client, chantier..." required>
+          <input type="text" id="trip-purpose" placeholder="Ex: Rendez-vous client...">
         </div>
-        <button id="validate-trip" class="btn btn-success btn-full" disabled>✅ Valider et enregistrer</button>
+        <button id="validate-trip" class="btn btn-success btn-full" disabled>✅ Valider</button>
       </div>
     </section>
-    
-    <!-- Vehicle Configuration Screen -->
+
+    <!-- Vehicle Screen -->
     <section id="vehicle-screen" class="screen">
       <div class="card">
-        <h3>🚙 Configuration du véhicule</h3>
+        <h3>🚙 Configuration véhicule</h3>
         <div class="form-group">
           <label for="vehicle-cv">Puissance fiscale (CV) *</label>
-          <select id="vehicle-cv" required>
+          <select id="vehicle-cv">
             <option value="3">3 CV et moins</option>
             <option value="4">4 CV</option>
             <option value="5" selected>5 CV</option>
@@ -332,152 +174,474 @@
           </select>
         </div>
         <div class="form-group">
-          <label>
-            <input type="checkbox" id="vehicle-electric"> 
-            Véhicule 100% électrique (+20% de majoration) ⚡
-          </label>
+          <label><input type="checkbox" id="vehicle-electric"> Véhicule électrique (+20%) ⚡</label>
         </div>
-        <div class="form-group">
-          <label for="vehicle-name">Nom du véhicule (optionnel)</label>
-          <input type="text" id="vehicle-name" placeholder="Ex: Peugeot 308, Tesla Model 3...">
-        </div>
-        <button id="save-vehicle" class="btn btn-full">💾 Enregistrer la configuration</button>
+        <button id="save-vehicle" class="btn btn-full">💾 Enregistrer</button>
       </div>
-      
       <div class="card">
-        <h3>ℹ️ Barème IK 2026 appliqué</h3>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">
-          Calcul selon le barème officiel URSSAF [[2]] :
+        <h3>ℹ️ Barème IK 2026</h3>
+        <p style="font-size:0.9rem;color:var(--text-muted)">
+          ≤ 5 000 km : d × 0,636 € (5 CV)<br>
+          5 001-20 000 km : (d × 0,357) + 1 395 €<br>
+          > 20 000 km : d × 0,427 €<br>
+          Électrique : +20%
         </p>
-        <ul style="font-size: 0.85rem; color: var(--text-muted); margin-left: 1rem; margin-top: 0.5rem;">
-          <li><strong>≤ 5 000 km :</strong> d × 0,636 € (5 CV)</li>
-          <li><strong>5 001-20 000 km :</strong> (d × 0,357) + 1 395 €</li>
-          <li><strong>> 20 000 km :</strong> d × 0,427 €</li>
-          <li><strong>Électrique :</strong> +20% sur le total</li>
-        </ul>
       </div>
     </section>
-    
-    <!-- Trips List Screen -->
+
+    <!-- Trips Screen -->
     <section id="trips-screen" class="screen">
       <div class="card">
-        <h3>📋 Mes trajets professionnels</h3>
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-          <select id="filter-month" style="flex: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border);">
-            <option value="all">Tous les mois</option>
-            <!-- Options générées dynamiquement -->
-          </select>
-          <button id="clear-filter" class="btn btn-outline" style="padding: 0.5rem 1rem;">✕</button>
-        </div>
-        <div id="trips-list">
-          <div class="loading">Chargement des trajets...</div>
-        </div>
+        <h3>📋 Mes trajets</h3>
+        <div id="trips-list"><div class="loading">Chargement...</div></div>
       </div>
     </section>
-    
-    <!-- Statistics Screen -->
+
+    <!-- Stats Screen -->
     <section id="stats-screen" class="screen">
       <div class="card">
         <h3>📊 Statistiques</h3>
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value" id="stat-total-km">0</div>
-            <div class="stat-label">Km totaux</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="stat-total-ik">0 €</div>
-            <div class="stat-label">IK estimées</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="stat-trips-count">0</div>
-            <div class="stat-label">Trajets</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="stat-avg-km">0</div>
-            <div class="stat-label">Km/jour</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <h3>📈 Évolution mensuelle</h3>
-        <div id="monthly-chart" style="height: 200px; display: flex; align-items: flex-end; gap: 4px; padding: 1rem 0;">
-          <!-- Barres générées dynamiquement -->
+          <div class="stat-card"><div class="stat-value" id="stat-total-km">0</div><div class="stat-label">Km totaux</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-total-ik">0 €</div><div class="stat-label">IK estimées</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-trips-count">0</div><div class="stat-label">Trajets</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-avg-km">0</div><div class="stat-label">Km/jour</div></div>
         </div>
       </div>
     </section>
-    
+
     <!-- Export Screen -->
     <section id="export-screen" class="screen">
       <div class="card">
-        <h3>📄 Export pour déclaration fiscale</h3>
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">
-          Générez un PDF conforme aux exigences de l'URSSAF avec le détail de vos trajets.
-        </p>
-        
-        <div class="form-group">
-          <label for="export-year">Année fiscale</label>
-          <select id="export-year">
-            <option value="2026">2026</option>
-            <option value="2025">2025</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="export-include-details" checked>
-            Inclure le détail des trajets (recommandé pour contrôle fiscal)
-          </label>
-        </div>
-        
-        <button id="generate-pdf" class="btn btn-full">📄 Générer le PDF fiscal</button>
-        
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
-          ℹ️ Le PDF inclut : récapitulatif annuel, détail par mois, barème appliqué, 
-          et mention de conformité au barème URSSAF 2026 [[1]][[2]].
+        <h3>📄 Export PDF</h3>
+        <p style="color:var(--text-muted);margin-bottom:1rem">Générez un récapitulatif fiscal.</p>
+        <button id="generate-pdf" class="btn btn-full">📄 Générer PDF</button>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-top:1rem">
+          ℹ️ PDF généré localement, aucune donnée envoyée.
         </p>
       </div>
-      
       <div class="card">
-        <h3>💾 Sauvegarde des données</h3>
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">
-          Exportez vos données pour les conserver ou les importer sur un autre appareil.
-        </p>
-        <button id="export-data" class="btn btn-outline btn-full">📥 Exporter les données (JSON)</button>
-        <button id="import-data" class="btn btn-outline btn-full" style="margin-top: 0.5rem;">📤 Importer des données</button>
-        <input type="file" id="import-file" accept=".json" style="display: none;">
+        <h3>💾 Sauvegarde</h3>
+        <button id="export-data" class="btn btn-outline btn-full">📥 Exporter JSON</button>
+        <button id="import-data" class="btn btn-outline btn-full" style="margin-top:0.5rem">📤 Importer JSON</button>
+        <input type="file" id="import-file" accept=".json" style="display:none">
       </div>
     </section>
   </main>
-  
-  <!-- Toast Notifications -->
+
   <div id="toast"></div>
-  
-  <!-- Install PWA Banner -->
-  <div id="install-banner">
-    <div style="flex: 1;">
-      <strong>📱 Installer IKtracker Pro</strong>
-      <div style="font-size: 0.9rem; color: var(--text-muted);">Accès rapide, fonctionnement hors-ligne</div>
-    </div>
-    <button id="install-btn" class="btn">Installer</button>
-    <button id="dismiss-install" style="background: none; border: none; color: var(--text-muted); cursor: pointer;">✕</button>
-  </div>
-  
-  <!-- Scripts -->
-  <script src="/js/ik-calculator.js"></script>
-  <script src="/js/pdf-generator.js"></script>
-  <script src="/js/app.js"></script>
-  
-  <!-- Service Worker Registration -->
+  <button id="toggle-debug">🐛 Debug</button>
+  <div id="debug-panel"></div>
+
+  <!-- === TOUT LE JAVASCRIPT ICI (pas de fichiers externes) === -->
+  <script>
+    // ===== LOGGER POUR DEBUG =====
+    const Logger = {
+      logs: [],
+      log(msg, type='info') {
+        const time = new Date().toLocaleTimeString();
+        const entry = `[${time}] ${msg}`;
+        this.logs.push(entry);
+        console.log(`[IKtracker] ${msg}`);
+        this.render();
+      },
+      error(msg) { this.log(`❌ ${msg}`, 'error'); console.error(msg); },
+      render() {
+        const panel = document.getElementById('debug-panel');
+        panel.innerHTML = this.logs.slice(-50).join('<br>');
+      }
+    };
+
+    // ===== CALCULATEUR IK =====
+    const IK_BAREME = {
+      3: { upTo5k: {c:0.529,f:0}, upTo20k: {c:0.316,f:1065}, beyond: {c:0.370} },
+      4: { upTo5k: {c:0.606,f:0}, upTo20k: {c:0.340,f:1330}, beyond: {c:0.407} },
+      5: { upTo5k: {c:0.636,f:0}, upTo20k: {c:0.357,f:1395}, beyond: {c:0.427} },
+      6: { upTo5k: {c:0.665,f:0}, upTo20k: {c:0.374,f:1457}, beyond: {c:0.447} },
+      7: { upTo5k: {c:0.697,f:0}, upTo20k: {c:0.394,f:1515}, beyond: {c:0.470} }
+    };
+
+    function calculateIK(distance, cv, electric=false) {
+      if (!distance || distance <= 0) return 0;
+      const cvKey = Math.min(Math.max(cv||5, 3), 7);
+      const rates = IK_BAREME[cvKey];
+      let rate;
+      if (distance <= 5000) rate = rates.upTo5k;
+      else if (distance <= 20000) rate = rates.upTo20k;
+      else rate = rates.beyond;
+      let amount = (distance * rate.c) + (rate.f || 0);
+      if (electric) amount *= 1.20;
+      return Math.round(amount * 100) / 100;
+    }
+
+    function formatEUR(amount) {
+      return new Intl.NumberFormat('fr-FR', {style:'currency',currency:'EUR'}).format(amount);
+    }
+
+    // ===== APPLICATION PRINCIPALE =====
+    class IKTrackerApp {
+      constructor() {
+        Logger.log('🚀 Initialisation de l\'app...');
+        this.vehicle = this.loadVehicle();
+        this.trips = this.loadTrips();
+        this.gps = { watchId:null, isTracking:false, startTime:null, totalDistance:0, lastPos:null };
+        this.init();
+      }
+
+      init() {
+        Logger.log('✅ DOM chargé, setup des événements...');
+        this.setupNavigation();
+        this.setupVehicleForm();
+        this.setupGPSTracking();
+        this.setupTripsList();
+        this.setupStats();
+        this.setupExport();
+        this.setupDebug();
+        this.renderTripsList();
+        this.updateStats();
+        Logger.log('🎉 Application prête !');
+      }
+
+      setupNavigation() {
+        Logger.log('🔗 Setup navigation...');
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const screen = e.currentTarget.dataset.screen;
+            Logger.log(`👉 Navigation vers: ${screen}`);
+            this.switchScreen(screen);
+          });
+        });
+      }
+
+      switchScreen(screenName) {
+        Logger.log(`🔄 Affichage écran: ${screenName}`);
+        document.querySelectorAll('.nav-btn').forEach(b => 
+          b.classList.toggle('active', b.dataset.screen === screenName)
+        );
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(`${screenName}-screen`);
+        if (target) {
+          target.classList.add('active');
+          Logger.log(`✅ Écran ${screenName} affiché`);
+          if (screenName === 'trips') this.renderTripsList();
+          if (screenName === 'stats') this.updateStats();
+        } else {
+          Logger.error(`❌ Écran non trouvé: ${screenName}-screen`);
+        }
+      }
+
+      setupVehicleForm() {
+        Logger.log('🚙 Setup formulaire véhicule...');
+        const cv = document.getElementById('vehicle-cv');
+        const electric = document.getElementById('vehicle-electric');
+        if (this.vehicle) {
+          cv.value = this.vehicle.cv || 5;
+          electric.checked = !!this.vehicle.electric;
+        }
+        document.getElementById('save-vehicle').addEventListener('click', () => {
+          this.vehicle = {
+            cv: parseInt(cv.value),
+            electric: electric.checked,
+            updatedAt: new Date().toISOString()
+          };
+          this.saveVehicle();
+          this.showToast('✅ Configuration enregistrée', 'success');
+          Logger.log('💾 Véhicule sauvegardé:', this.vehicle);
+        });
+      }
+
+      saveVehicle() { localStorage.setItem('ik_vehicle', JSON.stringify(this.vehicle)); }
+      loadVehicle() {
+        try {
+          const d = localStorage.getItem('ik_vehicle');
+          return d ? JSON.parse(d) : {cv:5, electric:false};
+        } catch(e) { Logger.error('Load vehicle: '+e); return {cv:5, electric:false}; }
+      }
+
+      setupGPSTracking() {
+        Logger.log('📍 Setup GPS...');
+        const toggle = document.getElementById('gps-toggle');
+        const validate = document.getElementById('validate-trip');
+        
+        toggle.addEventListener('click', () => {
+          Logger.log(`🔘 Toggle GPS: ${this.gps.isTracking ? 'STOP' : 'START'}`);
+          this.gps.isTracking ? this.stopGPS() : this.startGPS();
+        });
+        
+        validate.addEventListener('click', () => this.validateTrip());
+        document.getElementById('trip-purpose').addEventListener('input', (e) => {
+          validate.disabled = !e.target.value.trim() || !this.gps.isTracking;
+        });
+      }
+
+      async startGPS() {
+        if (!navigator.geolocation) {
+          this.showToast('❌ GPS non supporté', 'error');
+          Logger.error('Geolocation API not available');
+          return;
+        }
+        try {
+          Logger.log('🛰️ Demande autorisation GPS...');
+          this.gps.watchId = navigator.geolocation.watchPosition(
+            (pos) => this.onGPSUpdate(pos),
+            (err) => this.onGPSError(err),
+            {enableHighAccuracy:true, timeout:10000, maximumAge:0}
+          );
+          this.gps.isTracking = true;
+          this.gps.startTime = new Date();
+          this.gps.totalDistance = 0;
+          this.gps.lastPos = null;
+          
+          document.getElementById('gps-dot').className = 'status-dot active';
+          document.getElementById('gps-text').textContent = '📡 Tracking actif...';
+          document.getElementById('gps-info').style.display = 'block';
+          document.getElementById('gps-toggle').textContent = '⏹️ Arrêter';
+          document.getElementById('gps-toggle').classList.replace('btn-success','btn-danger');
+          document.getElementById('validate-trip').disabled = true;
+          
+          this.showToast('📍 Tracking démarré', 'success');
+          Logger.log('✅ GPS tracking started');
+        } catch(e) {
+          Logger.error('Start GPS error: '+e);
+          this.showToast('❌ Erreur GPS: '+e.message, 'error');
+        }
+      }
+
+      stopGPS() {
+        if (this.gps.watchId !== null) {
+          navigator.geolocation.clearWatch(this.gps.watchId);
+          this.gps.watchId = null;
+        }
+        this.gps.isTracking = false;
+        document.getElementById('gps-dot').className = 'status-dot';
+        document.getElementById('gps-text').textContent = '⏸️ Arrêté';
+        document.getElementById('gps-toggle').textContent = '▶️ Démarrer';
+        document.getElementById('gps-toggle').classList.replace('btn-danger','btn-success');
+        
+        const hasDist = this.gps.totalDistance > 0.1;
+        document.getElementById('validate-trip').disabled = !hasDist;
+        if (hasDist) this.showToast(`✅ ${this.gps.totalDistance.toFixed(2)} km`, 'success');
+        Logger.log(`🛑 GPS stopped. Distance: ${this.gps.totalDistance.toFixed(2)}km`);
+      }
+
+      onGPSUpdate(pos) {
+        const {latitude, longitude, accuracy} = pos.coords;
+        if (this.gps.lastPos) {
+          const dist = this.haversine(this.gps.lastPos.lat, this.gps.lastPos.lng, latitude, longitude);
+          if (dist >= 0.01 && accuracy < 50) {
+            this.gps.totalDistance += dist;
+            document.getElementById('gps-distance').textContent = this.gps.totalDistance.toFixed(2);
+          }
+        }
+        this.gps.lastPos = {lat:latitude, lng:longitude};
+      }
+
+      onGPSError(err) {
+        Logger.error('GPS error '+err.code+': '+err.message);
+        const msgs = {1:'Permission refusée', 2:'Position indisponible', 3:'Timeout'};
+        this.showToast('❌ GPS: '+(msgs[err.code]||'Erreur'), 'error');
+        this.stopGPS();
+      }
+
+      haversine(lat1,lon1,lat2,lon2) {
+        const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLon = (lon2-lon1)*Math.PI/180;
+        const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      }
+
+      async validateTrip() {
+        const purpose = document.getElementById('trip-purpose').value.trim();
+        if (!purpose || this.gps.totalDistance < 0.1) {
+          this.showToast('⚠️ Motif requis + min 100m', 'error');
+          return;
+        }
+        const trip = {
+          id: Date.now().toString(),
+          date: this.gps.startTime.toISOString(),
+          purpose,
+          distance: Math.round(this.gps.totalDistance*100)/100,
+          ikAmount: calculateIK(this.gps.totalDistance, this.vehicle.cv, this.vehicle.electric)
+        };
+        this.trips.unshift(trip);
+        this.saveTrips();
+        this.gps.totalDistance = 0;
+        document.getElementById('trip-purpose').value = '';
+        document.getElementById('validate-trip').disabled = true;
+        this.showToast(`✅ ${trip.distance}km = ${formatEUR(trip.ikAmount)}`, 'success');
+        Logger.log('💾 Trajet enregistré:', trip);
+        this.renderTripsList();
+        this.updateStats();
+      }
+
+      saveTrips() { localStorage.setItem('ik_trips', JSON.stringify(this.trips.slice(0,500))); }
+      loadTrips() {
+        try {
+          const d = localStorage.getItem('ik_trips');
+          return d ? JSON.parse(d) : [];
+        } catch(e) { Logger.error('Load trips: '+e); return []; }
+      }
+
+      setupTripsList() {
+        Logger.log('📋 Setup liste trajets...');
+      }
+
+      renderTripsList() {
+        Logger.log('🔄 Rendu liste trajets...');
+        const container = document.getElementById('trips-list');
+        if (!container) { Logger.error('trips-list not found'); return; }
+        
+        if (this.trips.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aucun trajet</p></div>';
+          return;
+        }
+        container.innerHTML = this.trips.slice(0,50).map(t => `
+          <div class="trip-item">
+            <div class="trip-info">
+              <div class="trip-date">${new Date(t.date).toLocaleDateString('fr-FR')}</div>
+              <div style="font-weight:500">${t.purpose}</div>
+              <div class="trip-distance">${t.distance.toFixed(2)} km</div>
+            </div>
+            <div class="trip-amount">${formatEUR(t.ikAmount)}</div>
+          </div>
+        `).join('');
+        Logger.log(`✅ ${this.trips.length} trajets affichés`);
+      }
+
+      setupStats() {
+        Logger.log('📊 Setup stats...');
+      }
+
+      updateStats() {
+        const year = new Date().getFullYear();
+        const yearTrips = this.trips.filter(t => new Date(t.date).getFullYear() === year);
+        const totalKm = yearTrips.reduce((s,t)=>s+t.distance,0);
+        const totalIK = yearTrips.reduce((s,t)=>s+t.ikAmount,0);
+        
+        document.getElementById('stat-total-km').textContent = Math.round(totalKm).toLocaleString('fr-FR');
+        document.getElementById('stat-total-ik').textContent = formatEUR(totalIK);
+        document.getElementById('stat-trips-count').textContent = yearTrips.length;
+        document.getElementById('stat-avg-km').textContent = yearTrips.length ? (totalKm/yearTrips.length).toFixed(1) : '0';
+        Logger.log('📈 Stats mises à jour');
+      }
+
+      setupExport() {
+        Logger.log('📄 Setup export...');
+        document.getElementById('generate-pdf').addEventListener('click', () => {
+          this.showToast('🔄 Génération PDF...', 'success');
+          setTimeout(() => {
+            this.generateSimplePDF();
+            this.showToast('✅ PDF téléchargé', 'success');
+          }, 500);
+        });
+        document.getElementById('export-data').addEventListener('click', () => this.exportJSON());
+        document.getElementById('import-data').addEventListener('click', () => document.getElementById('import-file').click());
+        document.getElementById('import-file').addEventListener('change', (e) => this.importJSON(e.target.files[0]));
+      }
+
+      generateSimplePDF() {
+        // Version simplifiée sans librairie externe
+        const year = new Date().getFullYear();
+        const trips = this.trips.filter(t => new Date(t.date).getFullYear() === year);
+        const totalKm = trips.reduce((s,t)=>s+t.distance,0);
+        const totalIK = trips.reduce((s,t)=>s+t.ikAmount,0);
+        
+        const content = `
+RAPPORT IKTRACKER PRO - ${year}
+================================
+Véhicule: ${this.vehicle.cv} CV ${this.vehicle.electric?'(Électrique +20%)':''}
+
+RÉCAPITULATIF:
+- Trajets: ${trips.length}
+- Distance: ${totalKm.toFixed(2)} km
+- IK estimées: ${formatEUR(totalIK)}
+
+DÉTAIL DES TRAJETS:
+${trips.map(t=>`${new Date(t.date).toLocaleDateString('fr-FR')} | ${t.purpose} | ${t.distance.toFixed(2)}km | ${formatEUR(t.ikAmount)}`).join('\n')}
+
+---
+Généré avec IKtracker Pro | Barème URSSAF 2026
+        `.trim();
+        
+        const blob = new Blob([content], {type:'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `IKtracker_Rapport_${year}.txt`; a.click();
+        URL.revokeObjectURL(url);
+        Logger.log('📄 PDF (TXT) généré');
+      }
+
+      exportJSON() {
+        const data = {version:'1.0', exportedAt:new Date().toISOString(), vehicle:this.vehicle, trips:this.trips};
+        const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = `iktracker_backup.json`; a.click();
+        this.showToast('✅ Données exportées', 'success');
+      }
+
+      importJSON(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (data.trips) {
+              const existing = new Set(this.trips.map(t=>t.id));
+              const newTrips = data.trips.filter(t=>!existing.has(t.id));
+              this.trips = [...newTrips, ...this.trips];
+              if (data.vehicle) this.vehicle = {...this.vehicle, ...data.vehicle};
+              this.saveVehicle(); this.saveTrips();
+              this.renderTripsList(); this.updateStats();
+              this.showToast(`✅ ${newTrips.length} trajets importés`, 'success');
+            }
+          } catch(err) { this.showToast('❌ Erreur import', 'error'); Logger.error('Import: '+err); }
+        };
+        reader.readAsText(file);
+      }
+
+      setupDebug() {
+        document.getElementById('toggle-debug').addEventListener('click', () => {
+          document.getElementById('debug-panel').classList.toggle('show');
+        });
+        // Exposer l'app pour debug console
+        window.ikApp = this;
+        Logger.log('🐛 Panel debug activé (bouton en bas à droite)');
+      }
+
+      showToast(msg, type='info') {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.className = `show ${type}`;
+        setTimeout(()=>toast.classList.remove('show'), 3000);
+      }
+    }
+
+    // ===== INITIALISATION =====
+    document.addEventListener('DOMContentLoaded', () => {
+      Logger.log('📄 DOMContentLoaded fired');
+      try {
+        window.ikApp = new IKTrackerApp();
+      } catch(e) {
+        Logger.error('💥 Erreur fatale: '+e);
+        console.error(e);
+        document.getElementById('toast').textContent = '❌ Erreur de chargement: '+e.message;
+        document.getElementById('toast').className = 'show error';
+      }
+    });
+
+    // Fallback si DOMContentLoaded déjà passé
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      Logger.log('⚡ DOM déjà prêt, initialisation immédiate');
+      setTimeout(() => {
+        if (!window.ikApp) window.ikApp = new IKTrackerApp();
+      }, 100);
+    }
+  </script>
+
+  <!-- Service Worker simple -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        try {
-          const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-          console.log('✅ Service Worker enregistré:', registration.scope);
-        } catch (error) {
-          console.error('❌ Échec SW:', error);
-        }
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(e => console.log('SW error:', e));
       });
     }
   </script>
