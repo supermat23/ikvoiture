@@ -3,116 +3,483 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Calculez et suivez automatiquement vos indemnités kilométriques selon le barème URSSAF 2026. Gratuit et conforme.">
+  <meta name="description" content="Suivez vos indemnités kilométriques professionnelles avec calcul automatique selon le barème URSSAF 2026.">
   <meta name="theme-color" content="#2661D9">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="IKtracker">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="IKtracker Pro">
   
-  <!-- Open Graph / Social -->
-  <meta property="og:title" content="IKtracker - Indemnités Kilométriques">
-  <meta property="og:description" content="Suivez vos indemnités kilométriques facilement">
+  <!-- Open Graph -->
+  <meta property="og:title" content="IKtracker Pro - Indemnités Kilométriques">
+  <meta property="og:description" content="Calculez automatiquement vos IK selon le barème fiscal 2026">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://iktracker.fr">
-  <meta property="og:image" content="/pwa-icon-512.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="192x192" href="/pwa-icon-192.png">
-  <link rel="apple-touch-icon" href="/pwa-icon-192.png">
+  <meta property="og:url" content="https://votre-domaine.com">
   
-  <!-- Manifest -->
+  <!-- Favicon & Manifest -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
   <link rel="manifest" href="/manifest.webmanifest">
-
-  <!-- Préchargement des ressources critiques -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://maps.googleapis.com">
-  <link rel="preconnect" href="https://*.supabase.co">
-
-  <title>IKtracker - Calcul automatique des indemnités kilométriques</title>
+  
+  <title>IKtracker Pro - Calcul IK 2026</title>
   
   <style>
-    /* Styles critiques inline pour le First Contentful Paint */
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    .loading { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-    .splash { background: #2661D9; color: white; padding: 2rem; border-radius: 1rem; text-align: center; }
+    /* CSS critique inline pour chargement rapide */
+    :root {
+      --primary: #2661D9;
+      --primary-dark: #1d4ed8;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* Header */
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    
+    /* Navigation */
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav button {
+      flex: 0 0 auto;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    nav button.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* Main content */
+    main { padding: 1rem; max-width: 800px; margin: 0 auto; }
+    .screen { display: none; animation: fadeIn 0.3s ease; }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .card h3 { margin-bottom: 0.75rem; color: var(--primary); font-size: 1.1rem; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--bg);
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(38, 97, 217, 0.1);
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--primary-dark); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline:hover { background: rgba(38, 97, 217, 0.1); }
+    .btn-success { background: var(--success); }
+    .btn-success:hover { background: #059669; }
+    .btn-danger { background: var(--danger); }
+    .btn-danger:hover { background: #DC2626; }
+    .btn-full { width: 100%; justify-content: center; }
+    
+    /* GPS Tracking */
+    #gps-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+    .status-dot.active { background: var(--success); animation: pulse 2s infinite; }
+    .status-dot.error { background: var(--danger); }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: var(--radius);
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 0.875rem; color: var(--text-muted); }
+    
+    /* Trips list */
+    .trip-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .trip-item:last-child { border-bottom: none; }
+    .trip-info { flex: 1; }
+    .trip-date { font-weight: 600; }
+    .trip-distance { color: var(--text-muted); font-size: 0.9rem; }
+    .trip-amount { font-weight: 700; color: var(--success); }
+    
+    /* Loading & Empty states */
+    .loading { text-align: center; padding: 2rem; color: var(--text-muted); }
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+    
+    /* Toast notifications */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--text);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      max-width: 90%;
+      text-align: center;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.success { background: var(--success); }
+    #toast.error { background: var(--danger); }
+    
+    /* Install PWA banner */
+    #install-banner {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 200;
+    }
+    #install-banner.show { display: flex; align-items: center; gap: 1rem; }
+    #install-banner .btn { flex-shrink: 0; }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.1rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    /* Print styles for PDF export */
+    @media print {
+      header, nav, #gps-section, .no-print { display: none !important; }
+      body { background: white; padding: 0; }
+      .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    }
   </style>
 </head>
 <body>
-  <!-- Écran de chargement (affiché avant le chargement de l'app) -->
-  <div id="splash-screen" class="loading">
-    <div class="splash">
-      <h1>🚗 IKtracker</h1>
-      <p>Chargement de votre espace...</p>
+  <!-- Header -->
+  <header>
+    <h1>🚗 IKtracker Pro</h1>
+  </header>
+  
+  <!-- Navigation -->
+  <nav>
+    <button class="nav-btn active" data-screen="gps">📍 GPS</button>
+    <button class="nav-btn" data-screen="vehicle">🚙 Véhicule</button>
+    <button class="nav-btn" data-screen="trips">📋 Trajets</button>
+    <button class="nav-btn" data-screen="stats">📊 Stats</button>
+    <button class="nav-btn" data-screen="export">📄 Export</button>
+  </nav>
+  
+  <!-- Main Content -->
+  <main>
+    <!-- GPS Tracking Screen -->
+    <section id="gps-screen" class="screen active">
+      <div class="card">
+        <h3>📍 Tracking GPS Professionnel</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          Démarrez le tracking en début de journée professionnelle. 
+          L'application calculera automatiquement les distances parcourues.
+        </p>
+        
+        <div id="gps-status">
+          <div class="status-dot" id="gps-dot"></div>
+          <span id="gps-text">GPS en attente...</span>
+        </div>
+        
+        <div id="gps-info" style="display: none; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg); border-radius: 8px;">
+          <div><strong>Début:</strong> <span id="gps-start-time">--:--</span></div>
+          <div><strong>Distance:</strong> <span id="gps-distance">0.00</span> km</div>
+          <div><strong>Points:</strong> <span id="gps-points">0</span></div>
+        </div>
+        
+        <button id="gps-toggle" class="btn btn-full">▶️ Démarrer le tracking</button>
+      </div>
+      
+      <div class="card">
+        <h3>📝 Valider la journée</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          À la fin de vos trajets professionnels, validez pour enregistrer la distance.
+        </p>
+        <div class="form-group">
+          <label for="trip-purpose">Motif professionnel *</label>
+          <input type="text" id="trip-purpose" placeholder="Ex: Rendez-vous client, chantier..." required>
+        </div>
+        <button id="validate-trip" class="btn btn-success btn-full" disabled>✅ Valider et enregistrer</button>
+      </div>
+    </section>
+    
+    <!-- Vehicle Configuration Screen -->
+    <section id="vehicle-screen" class="screen">
+      <div class="card">
+        <h3>🚙 Configuration du véhicule</h3>
+        <div class="form-group">
+          <label for="vehicle-cv">Puissance fiscale (CV) *</label>
+          <select id="vehicle-cv" required>
+            <option value="3">3 CV et moins</option>
+            <option value="4">4 CV</option>
+            <option value="5" selected>5 CV</option>
+            <option value="6">6 CV</option>
+            <option value="7">7 CV et plus</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="vehicle-electric"> 
+            Véhicule 100% électrique (+20% de majoration) ⚡
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="vehicle-name">Nom du véhicule (optionnel)</label>
+          <input type="text" id="vehicle-name" placeholder="Ex: Peugeot 308, Tesla Model 3...">
+        </div>
+        <button id="save-vehicle" class="btn btn-full">💾 Enregistrer la configuration</button>
+      </div>
+      
+      <div class="card">
+        <h3>ℹ️ Barème IK 2026 appliqué</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          Calcul selon le barème officiel URSSAF [[2]] :
+        </p>
+        <ul style="font-size: 0.85rem; color: var(--text-muted); margin-left: 1rem; margin-top: 0.5rem;">
+          <li><strong>≤ 5 000 km :</strong> d × 0,636 € (5 CV)</li>
+          <li><strong>5 001-20 000 km :</strong> (d × 0,357) + 1 395 €</li>
+          <li><strong>> 20 000 km :</strong> d × 0,427 €</li>
+          <li><strong>Électrique :</strong> +20% sur le total</li>
+        </ul>
+      </div>
+    </section>
+    
+    <!-- Trips List Screen -->
+    <section id="trips-screen" class="screen">
+      <div class="card">
+        <h3>📋 Mes trajets professionnels</h3>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <select id="filter-month" style="flex: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border);">
+            <option value="all">Tous les mois</option>
+            <!-- Options générées dynamiquement -->
+          </select>
+          <button id="clear-filter" class="btn btn-outline" style="padding: 0.5rem 1rem;">✕</button>
+        </div>
+        <div id="trips-list">
+          <div class="loading">Chargement des trajets...</div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Statistics Screen -->
+    <section id="stats-screen" class="screen">
+      <div class="card">
+        <h3>📊 Statistiques</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-km">0</div>
+            <div class="stat-label">Km totaux</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-ik">0 €</div>
+            <div class="stat-label">IK estimées</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-trips-count">0</div>
+            <div class="stat-label">Trajets</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-avg-km">0</div>
+            <div class="stat-label">Km/jour</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3>📈 Évolution mensuelle</h3>
+        <div id="monthly-chart" style="height: 200px; display: flex; align-items: flex-end; gap: 4px; padding: 1rem 0;">
+          <!-- Barres générées dynamiquement -->
+        </div>
+      </div>
+    </section>
+    
+    <!-- Export Screen -->
+    <section id="export-screen" class="screen">
+      <div class="card">
+        <h3>📄 Export pour déclaration fiscale</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          Générez un PDF conforme aux exigences de l'URSSAF avec le détail de vos trajets.
+        </p>
+        
+        <div class="form-group">
+          <label for="export-year">Année fiscale</label>
+          <select id="export-year">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="export-include-details" checked>
+            Inclure le détail des trajets (recommandé pour contrôle fiscal)
+          </label>
+        </div>
+        
+        <button id="generate-pdf" class="btn btn-full">📄 Générer le PDF fiscal</button>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
+          ℹ️ Le PDF inclut : récapitulatif annuel, détail par mois, barème appliqué, 
+          et mention de conformité au barème URSSAF 2026 [[1]][[2]].
+        </p>
+      </div>
+      
+      <div class="card">
+        <h3>💾 Sauvegarde des données</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          Exportez vos données pour les conserver ou les importer sur un autre appareil.
+        </p>
+        <button id="export-data" class="btn btn-outline btn-full">📥 Exporter les données (JSON)</button>
+        <button id="import-data" class="btn btn-outline btn-full" style="margin-top: 0.5rem;">📤 Importer des données</button>
+        <input type="file" id="import-file" accept=".json" style="display: none;">
+      </div>
+    </section>
+  </main>
+  
+  <!-- Toast Notifications -->
+  <div id="toast"></div>
+  
+  <!-- Install PWA Banner -->
+  <div id="install-banner">
+    <div style="flex: 1;">
+      <strong>📱 Installer IKtracker Pro</strong>
+      <div style="font-size: 0.9rem; color: var(--text-muted);">Accès rapide, fonctionnement hors-ligne</div>
     </div>
+    <button id="install-btn" class="btn">Installer</button>
+    <button id="dismiss-install" style="background: none; border: none; color: var(--text-muted); cursor: pointer;">✕</button>
   </div>
-
-  <!-- Contenu principal de l'application -->
-  <div id="app" hidden>
-    <!-- Votre application React/Vue/HTML sera montée ici -->
-  </div>
-
-  <!-- Script d'installation PWA -->
-  <script>
-    // Gestion de l'installation PWA
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      // Vous pouvez afficher un bouton "Installer" ici
-      console.log('PWA prête à être installée');
-    });
-
-    // Fonction pour déclencher l'installation (à appeler depuis un bouton)
-    window.installPWA = async () => {
-      if (!deferredPrompt) return false;
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      return outcome === 'accepted';
-    };
-
-    // Supprimer l'écran de chargement quand l'app est prête
-    window.appReady = () => {
-      document.getElementById('splash-screen').style.display = 'none';
-      document.getElementById('app').hidden = false;
-    };
-  </script>
-
-  <!-- Enregistrement du Service Worker -->
+  
+  <!-- Scripts -->
+  <script src="/js/ik-calculator.js"></script>
+  <script src="/js/pdf-generator.js"></script>
+  <script src="/js/app.js"></script>
+  
+  <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', async () => {
         try {
           const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
           console.log('✅ Service Worker enregistré:', registration.scope);
-          
-          // Vérifier les mises à jour
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // Nouvelle version disponible
-                if (confirm('Une nouvelle version est disponible. Recharger ?')) {
-                  window.location.reload();
-                }
-              }
-            });
-          });
         } catch (error) {
-          console.error('❌ Échec de l\'enregistrement du SW:', error);
+          console.error('❌ Échec SW:', error);
         }
       });
     }
-
-    // Gestion du mode hors-ligne
-    window.addEventListener('offline', () => {
-      console.log('📴 Mode hors-ligne activé');
-      // Afficher un indicateur visuel si nécessaire
-    });
-    window.addEventListener('online', () => {
-      console.log('📶 Connexion rétablie');
-    });
   </script>
 </body>
 </html>

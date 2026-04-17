@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hors-ligne • IKtracker</title>
+  <title>Hors-ligne • IKtracker Pro</title>
   <style>
     body { 
       font-family: system-ui, sans-serif; 
@@ -11,20 +11,29 @@
       padding: 2rem; 
       background: #f8fafc;
       color: #1e293b;
+      line-height: 1.6;
     }
-    .container { max-width: 500px; margin: 4rem auto; }
+    .container { max-width: 500px; margin: 3rem auto; }
     .icon { font-size: 4rem; margin-bottom: 1rem; }
     h1 { color: #2661D9; margin-bottom: 1rem; }
-    p { line-height: 1.6; color: #64748b; }
+    .features { 
+      text-align: left; 
+      background: white; 
+      padding: 1.5rem; 
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .features li { margin: 0.5rem 0; }
     .btn {
       display: inline-block;
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
+      margin-top: 1rem;
+      padding: 0.75rem 2rem;
       background: #2661D9;
       color: white;
       text-decoration: none;
       border-radius: 8px;
-      font-weight: 500;
+      font-weight: 600;
     }
     .btn:hover { background: #1d4ed8; }
   </style>
@@ -33,14 +42,25 @@
   <div class="container">
     <div class="icon">📴</div>
     <h1>Vous êtes hors-ligne</h1>
-    <p>IKtracker fonctionne partiellement sans connexion. Vos trajets enregistrés seront synchronisés automatiquement dès le retour de la connexion.</p>
-    <p><strong>✅ Fonctionnalités disponibles :</strong></p>
-    <ul style="text-align: left; margin: 1rem auto; max-width: 300px;">
-      <li>Consultation des trajets récents</li>
-      <li>Enregistrement de nouveaux trajets</li>
-      <li>Calcul des indemnités</li>
-    </ul>
-    <a href="/" class="btn" onclick="window.location.reload()">Réessayer</a>
+    <p>IKtracker Pro fonctionne sans connexion ! Vos données sont stockées localement sur votre appareil.</p>
+    
+    <div class="features">
+      <strong>✅ Fonctionnalités disponibles :</strong>
+      <ul>
+        <li>📍 Tracking GPS et enregistrement des trajets</li>
+        <li>🧮 Calcul automatique des indemnités kilométriques</li>
+        <li>📊 Consultation de vos statistiques</li>
+        <li>📄 Génération de PDF (téléchargement dès retour en ligne)</li>
+      </ul>
+    </div>
+    
+    <p style="color: #64748b; font-size: 0.9rem;">
+      💡 Astuce: Vos trajets GPS sont enregistrés localement. 
+      La synchronisation avec le cloud (si configurée) se fera automatiquement 
+      dès le retour de la connexion.
+    </p>
+    
+    <a href="/" class="btn" onclick="window.location.reload()">🔄 Réessayer</a>
   </div>
 </body>
 </html>

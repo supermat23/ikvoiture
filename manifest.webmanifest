@@ -1,10 +1,10 @@
 {
-  "name": "IKtracker - Indemnités Kilométriques",
-  "short_name": "IKtracker",
-  "description": "Calculez, enregistrez et exportez vos indemnités kilométriques selon le barème URSSAF 2026. Gratuit et conforme fiscalement.",
+  "name": "IKtracker Pro - Indemnités Kilométriques",
+  "short_name": "IKtracker Pro",
+  "description": "Calculez et suivez vos indemnités kilométriques selon le barème URSSAF 2026. Tracking GPS, export PDF fiscal, 100% hors-ligne.",
   "start_url": "/?source=pwa",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#ffffff",
   "theme_color": "#2661D9",
   "lang": "fr-FR",
@@ -14,78 +14,63 @@
   "categories": ["finance", "productivity", "utilities", "business"],
   "icons": [
     {
-      "src": "/pwa-icon-192.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa-icon-192-maskable.png",
+      "src": "/icons/icon-192-maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/pwa-icon-512.png",
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/pwa-icon-512-maskable.png",
+      "src": "/icons/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    },
-    {
-      "src": "/pwa-icon-1024.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/dashboard-mobile.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Tableau de bord mobile"
-    },
-    {
-      "src": "/screenshots/trip-form.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Formulaire de trajet"
     }
   ],
   "shortcuts": [
     {
-      "name": "Nouveau trajet",
-      "short_name": "Trajet",
-      "description": "Ajouter rapidement un nouveau trajet professionnel",
-      "url": "/?action=new-trip",
-      "icons": [{ "src": "/pwa-icon-192.png", "sizes": "192x192" }]
+      "name": "Démarrer GPS",
+      "short_name": "GPS",
+      "description": "Lancer le tracking GPS pour vos trajets pro",
+      "url": "/?screen=gps",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Mes rapports",
-      "short_name": "Rapports",
-      "description": "Consulter et exporter mes rapports kilométriques",
-      "url": "/report",
-      "icons": [{ "src": "/pwa-icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Mode tournée",
-      "short_name": "Tournée",
-      "description": "Enregistrer une tournée avec plusieurs arrêts",
-      "url": "/tour-mode",
-      "icons": [{ "src": "/pwa-icon-192.png", "sizes": "192x192" }]
+      "name": "Voir mes stats",
+      "short_name": "Stats",
+      "description": "Consulter mes statistiques IK",
+      "url": "/?screen=stats",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ],
+  "screenshots": [
+    {
+      "src": "/screenshots/gps-tracking.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tracking GPS en cours"
+    },
+    {
+      "src": "/screenshots/statistics.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Statistiques mensuelles"
+    }
+  ],
+  "id": "iktracker-pro-pwa",
   "related_applications": [],
-  "prefer_related_applications": false,
-  "id": "iktracker-pwa-2026",
-  "iarc_rating_id": "",
-  "protocol_handlers": []
+  "prefer_related_applications": false
 }
